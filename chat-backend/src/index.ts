@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 const mail = process.env.EMAIL_USER || "r";
 
 (async () => {
