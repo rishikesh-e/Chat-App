@@ -1,15 +1,14 @@
 import { Request, Response } from "express";
-import { Message } from "../models/message";
+import { Message } from "../../models/message";
 import mongoose from "mongoose";
 
 const getMessagesByChatId = async (
-  req: Request<{ chatId: string }>, // Explicitly type the params
+  req: Request<{ chatId: string }>,
   res: Response
 ) => {
   try {
     const { chatId } = req.params;
 
-    // Validate the chatId format
     if (!mongoose.Types.ObjectId.isValid(chatId)) {
       return res.status(400).json({ message: "Invalid chat ID format" });
     }

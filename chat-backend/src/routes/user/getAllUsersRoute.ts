@@ -6,7 +6,6 @@ const router = express.Router();
 
 router.get("/", verifyToken, async (req: Request, res: Response) => {
   try {
-    // Additional check for authenticated user
     if (!(req as any).userId) {
       return res.status(403).json({
         success: false,

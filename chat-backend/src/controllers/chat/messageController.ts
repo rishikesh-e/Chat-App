@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { Message } from "../models/message";
-import { Chat } from "../models/chat";
+import { Message } from "../../models/message";
+import { Chat } from "../../models/chat";
 
 interface IMessage {
   chatId: string;

@@ -5,8 +5,8 @@ import register from "./routes/auth/register";
 import verify from "./routes/auth/verifyOtp";
 import reset from "./routes/auth/resetPassword";
 import forgot from "./routes/auth/forgot";
-import home from "./routes/services/home";
-import completeProfile from "./routes/services/completeProfile";
+import home from "./routes/user/getAllUsersRoute";
+import completeProfile from "./routes/user/completeProfile";
 import chatRoute from "./routes/chat/chatRoute";
 import messageRoutes from "./routes/chat/messageRoute";
 import bodyParser from "body-parser";
@@ -14,7 +14,7 @@ import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
 import { setupSocket } from "./sockets/socket";
-import { verifyToken } from "./middleware/auth";
+import userRoutes from "./routes/user/userRoute";
 
 const app = express();
 app.use(express.json());
@@ -77,8 +77,9 @@ app.use("/api/auth", verify);
 app.use("/api/auth", reset);
 
 // Service pages - Home and completeProfile
-app.use("/api/home", verifyToken, home);
-app.use("/api", verifyToken, completeProfile);
+app.use("/api/home", home);
+app.use("/api", completeProfile);
+app.use("/api", userRoutes);
 
 // Chat and Message routes
 app.use("/api", chatRoute);
