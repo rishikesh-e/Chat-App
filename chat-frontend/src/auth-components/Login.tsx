@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 interface ILogin {
     email: string
@@ -19,17 +19,21 @@ const Login = () => {
         try {
             const response = await axios.post('http://localhost:3001/api/auth/login', 
                 login,
-                {withCredentials: true}
-            )
-            setResponseMessage('Login Successful')
-            alert('login done')
-            console.log(response.data)
-            navigate('/home')
-        } catch ( error: any ) {
-            setResponseMessage(error?.response?.data?.message || 'Login failed');
-            console.error(error);
-        } 
+                { withCredentials: true }
+            );
+            const token = response.data?.token;
+            if (token) {
+                localStorage.setItem('token', token);
+            }
+            setResponseMessage('Login Successful');
+            console.log(response.data);
+            navigate('/home');
+    } catch (error: any) {
+        setResponseMessage(error?.response?.data?.message || 'Login failed');
+        console.error(error);
     }
+}
+
     return (
         <div>
             <h2>Login</h2>
@@ -48,6 +52,8 @@ const Login = () => {
             />
             <br />
             <button onClick={handleLogin}>Login</button>
+            <p>Don't have an Account ? <Link to="/register">Register now</Link></p>
+            <p>Forgot your password ? <Link to="/forgot-password">Recover it</Link></p>
             <p>{responseMessage}</p>
         </div>
     )

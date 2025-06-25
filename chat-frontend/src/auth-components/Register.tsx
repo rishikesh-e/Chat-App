@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 interface IRegister {
     name: string
@@ -55,6 +55,7 @@ const Register = () => {
             />
             <br />
             <button onClick={handleRegister}>Register</button>
+            <p>Already having an account? <Link to="/">Login now</Link></p>
             <p>{responseMessage}</p>
         </div>
   );
