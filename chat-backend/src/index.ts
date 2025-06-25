@@ -4,25 +4,52 @@ import login from "./routes/auth/login";
 import register from "./routes/auth/register";
 import verify from "./routes/auth/verifyOtp";
 import reset from "./routes/auth/resetPassword";
-import bodyParser from "body-parser";
 import forgot from "./routes/auth/forgot";
 import home from "./routes/services/home";
-import info from "./routes/services/info";
+import completeProfile from "./routes/services/completeProfile";
+import chatRoute from "./routes/chat/chatRoute";
+import messageRoutes from "./routes/chat/messageRoute";
+import bodyParser from "body-parser";
+import cors from "cors";
+import http from "http";
+import { Server } from "socket.io";
+import { setupSocket } from "./sockets/socket";
+import { verifyToken } from "./middleware/auth";
 
 const app = express();
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Allowing React to fetch the Backend
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+
 const PORT = process.env.PORT || 3001;
 const mail = process.env.EMAIL_USER || "r";
 
+// Connecting MongoDB => chat-db
 (async () => {
   try {
     await connectDB();
 
-    const server = app.listen(PORT, () => {
-      console.log(` Server running on port ${PORT}`);
+    const server = http.createServer(app);
+    const io = new Server(server, {
+      cors: {
+        origin: "http://localhost:3000",
+        credentials: true,
+      },
+    });
+
+    // Setup socket listeners
+    setupSocket(io);
+
+    server.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
       console.log(mail);
     });
 
@@ -42,10 +69,17 @@ const mail = process.env.EMAIL_USER || "r";
   }
 })();
 
+// Auth routes - Login, Register, Forgot Password, Verify OTP, Reset Password
 app.use("/api/auth", login);
 app.use("/api/auth", register);
 app.use("/api/auth", forgot);
 app.use("/api/auth", verify);
 app.use("/api/auth", reset);
-app.use("/api/home", home);
-app.use("/api", info);
+
+// Service pages - Home and completeProfile
+app.use("/api/home", verifyToken, home);
+app.use("/api", verifyToken, completeProfile);
+
+// Chat and Message routes
+app.use("/api", chatRoute);
+app.use("/api", messageRoutes);
