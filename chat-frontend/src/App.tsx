@@ -5,7 +5,6 @@ import Register from './auth-components/Register';
 import ForgotPassword from './auth-components/ForgotPassword';
 import VerifyOtp from './auth-components/VerifyOtp';
 import ResetPassword from './auth-components/ResetPassword';
-import ChatLayout from './pages/ChatLayout';
 
 const App: React.FC = () => {
     return (
@@ -17,8 +16,7 @@ const App: React.FC = () => {
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/verify-otp" element={<VerifyOtp />} />
                 <Route path='/reset-password' element={<ResetPassword />} />
-                <Route path="/home" element={<ChatLayout />} />
-                <Route path="/home/:receiverId" element={<ChatLayout />} />
+                
             </Routes>
         </BrowserRouter>
     );
