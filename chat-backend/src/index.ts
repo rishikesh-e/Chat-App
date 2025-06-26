@@ -76,8 +76,8 @@ app.use("/api/auth", forgot);
 app.use("/api/auth", verify);
 app.use("/api/auth", reset);
 
-// Service pages - Home and completeProfile
-app.use("/api/home", home);
+// Service pages - Home(get all users) and completeProfile
+app.use("/api/users", home);
 app.use("/api", completeProfile);
 app.use("/api", userRoutes);
 
